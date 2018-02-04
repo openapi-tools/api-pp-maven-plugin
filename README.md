@@ -14,7 +14,7 @@ paradigm (having support for multiple versions in same endpoint) is used.
 
 # Status
 
-Module is under development.
+Module is under development..
 
 # Future
 The initial version supports a rudimentary standard collection of reponse and request codes and headers.
