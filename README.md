@@ -4,6 +4,9 @@ This plugin is intended to use the [Swagger Core library](https://github.com/swa
 OpenAPI specification with request and reponse headers, reponse codes etc. in order for a build pipeline to extend 
 REST services with defaults. 
 
+  [![Build status](https://travis-ci.org/openapi-tools/api-pp-maven-plugin.svg?branch=master)](https://travis-ci.org/openapi-tools/api-pp-maven-plugin)
+
+
 # Where to apply
 
 The idea is to minimize the annotation clutter in the code and postpone what you would always and automate that as a part of development.
