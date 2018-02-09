@@ -87,6 +87,45 @@ public class APIPostProcessorMojoIT {
         assertFalse("As this is a min postprocessing 505 should not be part of that", apiAsStr.contains("505"));
     }
 
+    @Test
+    public void testSpecificCodesPostProcessed() throws Exception {
+        Path output = Paths.get("target/api-codes");
+        if (Files.exists(output)) {
+            Files.walkFileTree(output, new DeleteVisitor());
+        }
+        File file = new File("src/test/resources/codes-post-processor-mojo-pom.xml");
+        Mojo mojo = rule.lookupMojo("postprocessor", file);
+        mojo.execute();
+        File yaml = new File("target/api-codes/open-api-specs-codes.yaml");
+        assertTrue(yaml.exists());
+        File json = new File("target/api-codes/open-api-specs-codes.json");
+        assertTrue(json.exists());
+        String apiAsStr = new String(Files.readAllBytes(Paths.get("target/api-codes/open-api-specs-codes.yaml")));
+        assertTrue("As this is a codes postprocessing 202 should be part of that", apiAsStr.contains("202"));
+        assertTrue("As this is a codes postprocessing 501 should  be part of that", apiAsStr.contains("501"));
+        assertTrue("As this is a codes postprocessing 505 should  be part of that", apiAsStr.contains("505"));
+    }
+
+    @Test
+    public void testSpecificCodesMinPostProcessed() throws Exception {
+        Path output = Paths.get("target/api-codes-min");
+        if (Files.exists(output)) {
+            Files.walkFileTree(output, new DeleteVisitor());
+        }
+        File file = new File("src/test/resources/codes-min-post-processor-mojo-pom.xml");
+        Mojo mojo = rule.lookupMojo("postprocessor", file);
+        mojo.execute();
+        File yaml = new File("target/api-codes-min/open-api-specs-codes-min.yaml");
+        assertTrue(yaml.exists());
+        File json = new File("target/api-codes-min/open-api-specs-codes-min.json");
+        assertTrue(json.exists());
+        String apiAsStr = new String(Files.readAllBytes(Paths.get("target/api-codes-min/open-api-specs-codes-min.yaml")));
+        assertTrue("As this is a min codes postprocessing 202 should be part of that", apiAsStr.contains("202"));
+        assertFalse("As this is a min codes postprocessing 501 should not be part of that", apiAsStr.contains("501"));
+        assertFalse("As this is a min codes postprocessing 505 should not be part of that", apiAsStr.contains("505"));
+        assertTrue("As this is a min codes postprocessing 500 should  be part of that", apiAsStr.contains("500"));
+    }
+
     private static class DeleteVisitor extends SimpleFileVisitor<Path> {
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {

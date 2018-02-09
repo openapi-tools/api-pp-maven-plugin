@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.openapitools.api.specification.test</groupId>
+    <artifactId>mojo-test</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Open API Post Processor Maven Mojo</name>
+
+    <dependencies>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.openapitools.swagger</groupId>
+                <artifactId>api-pp-maven-plugin</artifactId>
+                <configuration>
+                    <packages/>
+                    <codes>
+                        <code>200</code>
+                        <code>201</code>
+                        <code>202</code>
+                        <code>203</code>
+                        <code>204</code>
+                        <code>301</code>
+                        <code>304</code>
+                        <code>307</code>
+                        <code>400</code>
+                        <code>401</code>
+                        <code>403</code>
+                        <code>404</code>
+                        <code>406</code>
+                        <code>409</code>
+                        <code>410</code>
+                        <code>412</code>
+                        <code>415</code>
+                        <code>422</code>
+                        <code>429</code>
+                        <code>500</code>
+                        <code>501</code>
+                        <code>503</code>
+                        <code>505</code>
+                    </codes>
+                    <inputDirectory>sample-api</inputDirectory>
+                    <inputFilename>petstore</inputFilename>
+                    <outputDirectory>target/api-codes</outputDirectory>
+                    <outputFilename>open-api-specs-codes</outputFilename>
+                    <outputFormats>
+                        <outputFormat>JSON</outputFormat>
+                        <outputFormat>YAML</outputFormat>
+                    </outputFormats>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

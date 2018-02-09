@@ -34,10 +34,16 @@ import org.apache.maven.project.MavenProjectHelper;
 public class APIPostProcessorMojo extends AbstractMojo {
 
     /**
-     * List of packages which contains API resources. This is <i>not</i> recursive.
+     * List of packages which states what sets of codes must be added to API resources. This is <i>not</i> recursive.
      */
     @Parameter
     private Set<String> packages;
+
+    /**
+     * List of codes which must be added to API resources. This is <i>not</i> recursive.
+     */
+    @Parameter
+    private Set<String> codes;
 
     /**
      * Directory which contains the input specification. Default is "${project.build.directory}"
@@ -81,7 +87,11 @@ public class APIPostProcessorMojo extends AbstractMojo {
     @Component
     private MavenProjectHelper projectHelper;
     
-    String[] minCodes = {"200", "202", "204", "301", "400", "404", "415", "500"};
+    String[] minimum = {"200", "202", "204", "301", "400", "404", "415", "500"};
+    String[] standard = {"200", "201", "202", "203", "204", "301", "304", "307", 
+        "400", "401", "403", "404", "406", "409", "410", "412", "415", "422", "429", 
+         "500", "501", "503", "505"};
+
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -101,14 +111,15 @@ public class APIPostProcessorMojo extends AbstractMojo {
             throw new MojoFailureException("It was not possible to find input API specification at "
                     + fileAndPathName + " with  extensions json, yml or yaml");
         }
-
-        if (null == packages) {
-            ApplyStandardHeadersAndResponses(api);
+        
+        if (null == packages && null == codes) {
+            ApplySpecificHeadersAndResponses(api, new HashSet(Arrays.asList(standard)));
         } else {
             if (packages.contains("standard")) {
-                ApplyStandardHeadersAndResponses(api);
+                ApplySpecificHeadersAndResponses(api, new HashSet(Arrays.asList(standard)));
             } else if (packages.contains("minimal")) {
-                Set<String> codes = new HashSet(Arrays.asList(minCodes));
+                ApplySpecificHeadersAndResponses(api, new HashSet(Arrays.asList(minimum)));
+            } else if (codes.size() > 0) {
                 ApplySpecificHeadersAndResponses(api, codes);
             }
         }
@@ -130,18 +141,6 @@ public class APIPostProcessorMojo extends AbstractMojo {
             }
         }
         );
-    }
-
-    private void ApplyStandardHeadersAndResponses(Swagger api) {
-        Map<String, Path> paths = api.getPaths();
-        paths.forEach((k, p) -> {
-            List<Operation> operations = p.getOperations();
-            operations.forEach(operation -> {
-                Responses.addStandardResponseCodes(operation);
-                Headers.addStandardParameters(operation);
-                Responses.addStandardVerbSpecificHeaders(p);
-            });
-        });
     }
 
     private void ApplySpecificHeadersAndResponses(Swagger api, Set<String> codes) {

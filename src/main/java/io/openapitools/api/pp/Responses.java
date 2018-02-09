@@ -35,23 +35,6 @@ public final class Responses {
         if (codes.contains("503")) addServerBusyResponse503(operation);
         if (codes.contains("505")) addUnsupportedHTTPVersionResponse505(operation);
     }
-    
-    public static void addStandardResponseCodes(Operation operation) {
-        addOKResponse200(operation);
-        addBadRequestResponse400(operation);
-        addNotAuthorizedResponse401(operation);
-        addForbiddenResponse403(operation);
-        addNotFoundResponse404(operation);
-        addNotAcceptableResponse406(operation);
-        addConflictResponse409(operation);
-        addGoneResponse410(operation);
-        addPreconditionFailedResponse412(operation);
-        addUnsupportedContentTypeResponse415(operation);
-        addClientTooBusyResponse429(operation);
-        addServerErrorResponse500(operation);
-        addServerBusyResponse503(operation);
-        addUnsupportedHTTPVersionResponse505(operation);
-    }
 
     public static void addVerbSpecificHeaders(Path p, Set<String> codes) { 
         if (null != p.getGet()) addGetResponses(p.getGet(), codes);
@@ -60,25 +43,7 @@ public final class Responses {
         if (null != p.getPatch()) addPatchResponses(p.getPatch(), codes);
         if (null != p.getDelete()) addDeleteResponses(p.getDelete(), codes);
     }
-    
-    public static void addStandardVerbSpecificHeaders(Path p) {
-        if (null != p.getGet()) addGetStandardResponses(p.getGet());
-        if (null != p.getPut()) addPutStandardResponses(p.getPut());
-        if (null != p.getPost()) addPostStandardResponses(p.getPost());
-        if (null != p.getPatch()) addPatchStandardResponses(p.getPatch());
-        if (null != p.getDelete()) addDeleteStandardResponses(p.getDelete());
-    }
-
-    private static void addGetStandardResponses(Operation getOperation) {
-        addAcceptedResponse202(getOperation);
-        addNonAuthoritativeInformationResponse203(getOperation);
-        addPermanentlyMovedResponse301(getOperation);
-        addUnmodifiedResponse304(getOperation);
-        addTemporaryRedirectResponse307(getOperation);
-        addNotFoundResponse404(getOperation);
-        addGoneResponse410(getOperation);
-        addNotImplementedResponse501(getOperation);
-    }
+   
     private static void addGetResponses(Operation getOperation, Set<String> codes ) {
         if (codes.contains("202")) addAcceptedResponse202(getOperation);
         if (codes.contains("203")) addNonAuthoritativeInformationResponse203(getOperation);
@@ -88,21 +53,6 @@ public final class Responses {
         if (codes.contains("404")) addNotFoundResponse404(getOperation);
         if (codes.contains("410")) addGoneResponse410(getOperation);
         if (codes.contains("501")) addNotImplementedResponse501(getOperation);
-    }
-
-    private static void addPostStandardResponses(Operation postOperation) {
-        addCreatedResponse201(postOperation);
-        addAcceptedResponse202(postOperation);
-        addPermanentlyMovedResponse301(postOperation);
-        addTemporaryRedirectResponse307(postOperation);
-        addGoneResponse410(postOperation);
-        addPreconditionFailedResponse412(postOperation);
-        addUnsupportedContentTypeResponse415(postOperation);
-        addClientTooBusyResponse429(postOperation);
-        addServerErrorResponse500(postOperation);
-        addNotImplementedResponse501(postOperation);
-        addServerBusyResponse503(postOperation);
-        addUnsupportedHTTPVersionResponse505(postOperation);
     }
     
     private static void addPostResponses(Operation postOperation, Set<String> codes) {
@@ -120,21 +70,6 @@ public final class Responses {
         if (codes.contains("505")) addUnsupportedHTTPVersionResponse505(postOperation);
     }
 
-    private static void addPutStandardResponses(Operation putOperation) {
-        addCreatedResponse201(putOperation);
-        addAcceptedResponse202(putOperation);
-        addPermanentlyMovedResponse301(putOperation);
-        addTemporaryRedirectResponse307(putOperation);
-        addGoneResponse410(putOperation);
-        addPreconditionFailedResponse412(putOperation);
-        addUnsupportedContentTypeResponse415(putOperation);
-        addClientTooBusyResponse429(putOperation);
-        addServerErrorResponse500(putOperation);
-        addNotImplementedResponse501(putOperation);
-        addServerBusyResponse503(putOperation);
-        addUnsupportedHTTPVersionResponse505(putOperation);
-    }
-
     private static void addPutResponses(Operation putOperation, Set<String> codes) {
         if (codes.contains("201")) addCreatedResponse201(putOperation);
         if (codes.contains("202")) addAcceptedResponse202(putOperation);
@@ -150,17 +85,8 @@ public final class Responses {
         if (codes.contains("505")) addUnsupportedHTTPVersionResponse505(putOperation);
     }
 
-    private static void addDeleteStandardResponses(Operation deleteOperation) {
-        addNoContentResponse204(deleteOperation);
-    }
-
     private static void addDeleteResponses(Operation deleteOperation, Set<String> codes) {
         if (codes.contains("204")) addNoContentResponse204(deleteOperation);
-    }
-
-    private static void addPatchStandardResponses(Operation patchOperation) {
-        Headers.addPatchHeaders(patchOperation);
-        addUnprocessableRequestResponse422(patchOperation);
     }
 
     private static void addPatchResponses(Operation patchOperation, Set<String> codes) {
