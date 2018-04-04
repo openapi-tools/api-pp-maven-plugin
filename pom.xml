@@ -5,7 +5,7 @@
     
     <name>API Post Processing Maven Plugin</name>
     <groupId>io.openapitools.api.specification</groupId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <artifactId>api-pp-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
 
@@ -33,7 +33,7 @@
         <connection>scm:git:https://github.com/openapi-tools/api-pp-maven-plugin.git</connection>
         <developerConnection>scm:git:https://github.com/openapi-tools/api-pp-maven-plugin.git</developerConnection>
         <url>https://github.com/openapi-tools/api-pp-maven-plugin/tree/master</url>
-        <tag>v0.0.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
