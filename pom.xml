@@ -48,19 +48,24 @@
     </distributionManagement>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        
-        <io.swagger.version>1.5.16</io.swagger.version>
+        <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
+        <checkstyle.version>7.8.2</checkstyle.version>
+        <findbugs.version>3.0.4</findbugs.version>
+        <io.openapitools.jackson.dataformat.version>1.0.4</io.openapitools.jackson.dataformat.version>
         <io.swagger.parser.version>1.0.29</io.swagger.parser.version>
+        <io.swagger.version>1.5.16</io.swagger.version>
+        <jacoco.version>0.7.9</jacoco.version>
+        <javax.xml.bin.jaxb-api.version>2.3.0</javax.xml.bin.jaxb-api.version>
         <junit.version>4.12</junit.version>
+        <maven.jxr.version>2.5</maven.jxr.version>
         <org.mockito.version>2.11.0</org.mockito.version>
-        <org.slf4j.version>1.7.25</org.slf4j.version>
         <org.apache.maven.maven-plugin-annotations.version>3.5</org.apache.maven.maven-plugin-annotations.version>
         <org.apache.maven.version>3.5.0</org.apache.maven.version>
-        <io.openapitools.jackson.dataformat.version>1.0.4</io.openapitools.jackson.dataformat.version>
+        <org.slf4j.version>1.7.25</org.slf4j.version>
         <org.apache.maven.plugin-testing.version>3.3.0</org.apache.maven.plugin-testing.version>
-        <javax.xml.bin.jaxb-api.version>2.3.0</javax.xml.bin.jaxb-api.version>
+        <pmd.plugin.version>3.8</pmd.plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencies>
@@ -149,6 +154,33 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle.plugin.version}</version>
+                <configuration>
+                    <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                    <includes>**/io/openapitools/**/*.java</includes>
+                    <configLocation>https://raw.githubusercontent.com/openapi-tools/code-style/master/checkstyle/rules.xml</configLocation>
+                    <includeTestResources>false</includeTestResources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>checkstyle</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>checkstyle</goal>
+                        </goals>
+                    </execution>
+                </executions>    
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>3.5</version>
             </plugin>
@@ -223,6 +255,74 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <configuration>
+                    <excludes>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${pmd.plugin.version}</version>
+                <configuration>
+                    <rulesets>
+                        <ruleset>https://raw.githubusercontent.com/openapi-tools/code-style/master/pmd/rules.xml</ruleset>
+                    </rulesets>
+                    <targetJdk>${jdk.version}</targetJdk>
+                    <includes>
+                        <include>**/io/openapitools/**/*.java</include>
+                    </includes>
+                    <excludes>
+                    </excludes>
+                    <excludeRoots>
+                    </excludeRoots>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>pmd</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>pmd</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs.version}</version>
+                <configuration>
+                    <onlyAnalyze>io.openapitools.-</onlyAnalyze>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>findbugs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>findbugs</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.5.3</version>
@@ -232,5 +332,14 @@
             </plugin>
         </plugins>
     </build>
+    <reporting>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jxr-plugin</artifactId>
+          <version>${maven.jxr.version}</version>
+        </plugin>
+      </plugins>
+  </reporting>
 
 </project>
