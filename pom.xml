@@ -52,7 +52,7 @@
         <checkstyle.version>7.8.2</checkstyle.version>
         <findbugs.version>3.0.4</findbugs.version>
         <io.openapitools.jackson.dataformat.version>1.0.4</io.openapitools.jackson.dataformat.version>
-        <io.swagger.parser.version>1.0.29</io.swagger.parser.version>
+        <io.swagger.parser.version>1.0.34</io.swagger.parser.version>
         <io.swagger.version>1.5.16</io.swagger.version>
         <jacoco.version>0.7.9</jacoco.version>
         <javax.xml.bin.jaxb-api.version>2.3.0</javax.xml.bin.jaxb-api.version>

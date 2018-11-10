@@ -86,8 +86,8 @@ public class APIPostProcessorMojo extends AbstractMojo {
     @Component
     private MavenProjectHelper projectHelper;
     
-    private final String[] minimum = {"200", "202", "204", "301", "400", "404", "415", "500"};
-    private final String[] standard = {"200", "201", "202", "203", "204", "301", "304", "307", 
+    private final String[] MINIMUM = {"200", "202", "204", "301", "400", "404", "415", "500"};
+    private final String[] STANDARD = {"200", "201", "202", "203", "204", "301", "304", "307", 
         "400", "401", "403", "404", "406", "409", "410", "412", "415", "422", "429", 
         "500", "501", "503", "505"};
 
@@ -106,12 +106,12 @@ public class APIPostProcessorMojo extends AbstractMojo {
         }
         
         if (null == packages && null == codes) {
-            applySpecificHeadersAndResponses(api, new HashSet<>(Arrays.asList(standard)));
+            applySpecificHeadersAndResponses(api, new HashSet<>(Arrays.asList(STANDARD)));
         } else {
             if (null != packages && packages.contains("standard")) {
-                applySpecificHeadersAndResponses(api, new HashSet<>(Arrays.asList(standard)));
+                applySpecificHeadersAndResponses(api, new HashSet<>(Arrays.asList(STANDARD)));
             } else if (null != packages && packages.contains("minimal")) {
-                applySpecificHeadersAndResponses(api, new HashSet<>(Arrays.asList(minimum)));
+                applySpecificHeadersAndResponses(api, new HashSet<>(Arrays.asList(MINIMUM)));
             } else if (null != codes  && codes.size() > 0) {
                 applySpecificHeadersAndResponses(api, codes);
             }
@@ -136,17 +136,13 @@ public class APIPostProcessorMojo extends AbstractMojo {
         );
     }
 
-    private String findFileFormat(String fileAndPathName) {
-        if (Files.exists(Paths.get(fileAndPathName + ".json"))) {
-            fileAndPathName = fileAndPathName + ".json";
-        } else if (Files.exists(Paths.get(fileAndPathName + ".yaml"))) {
-            fileAndPathName = fileAndPathName + ".yaml";
-        } else if (Files.exists(Paths.get(fileAndPathName + ".yml"))) {
-            fileAndPathName = fileAndPathName + ".yml";
-        }
-        return fileAndPathName;
+    private String findFileFormat(final String fileAndPathName) {
+        return Arrays.asList(fileAndPathName + ".json", fileAndPathName + ".yaml", fileAndPathName + ".yml").stream()
+            .filter(ffn -> Files.exists(Paths.get(ffn)))
+            .findAny()
+            .orElse(fileAndPathName);
     }
-
+    
     private void applySpecificHeadersAndResponses(Swagger api, Set<String> codes) {
         Map<String, Path> paths = api.getPaths();
         paths.forEach((k, p) -> {
