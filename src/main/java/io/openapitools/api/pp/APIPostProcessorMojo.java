@@ -15,7 +15,6 @@ import io.swagger.models.Operation;
 import io.swagger.models.Path;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -87,10 +86,10 @@ public class APIPostProcessorMojo extends AbstractMojo {
     @Component
     private MavenProjectHelper projectHelper;
     
-    String[] minimum = {"200", "202", "204", "301", "400", "404", "415", "500"};
-    String[] standard = {"200", "201", "202", "203", "204", "301", "304", "307", 
+    private final String[] MINIMUM = {"200", "202", "204", "301", "400", "404", "415", "500"};
+    private final String[] STANDARD = {"200", "201", "202", "203", "204", "301", "304", "307", 
         "400", "401", "403", "404", "406", "409", "410", "412", "415", "422", "429", 
-         "500", "501", "503", "505"};
+        "500", "501", "503", "505"};
 
 
     @Override
@@ -98,13 +97,7 @@ public class APIPostProcessorMojo extends AbstractMojo {
 
         SwaggerParser swaggerParser = new SwaggerParser();
         String fileAndPathName = inputDirectory + "/" + inputFilename;
-        if (Files.exists(Paths.get(fileAndPathName + ".json"))) {
-            fileAndPathName = fileAndPathName + ".json";
-        } else if (Files.exists(Paths.get(fileAndPathName + ".yaml"))) {
-            fileAndPathName = fileAndPathName + ".yaml";
-        } else if (Files.exists(Paths.get(fileAndPathName + ".yml"))) {
-            fileAndPathName = fileAndPathName + ".yml";
-        }
+        fileAndPathName = findFileFormat(fileAndPathName);
         Swagger api = swaggerParser.read(fileAndPathName);
 
         if (api == null) {
@@ -113,14 +106,14 @@ public class APIPostProcessorMojo extends AbstractMojo {
         }
         
         if (null == packages && null == codes) {
-            ApplySpecificHeadersAndResponses(api, new HashSet(Arrays.asList(standard)));
+            applySpecificHeadersAndResponses(api, new HashSet<>(Arrays.asList(STANDARD)));
         } else {
-            if (packages.contains("standard")) {
-                ApplySpecificHeadersAndResponses(api, new HashSet(Arrays.asList(standard)));
-            } else if (packages.contains("minimal")) {
-                ApplySpecificHeadersAndResponses(api, new HashSet(Arrays.asList(minimum)));
-            } else if (codes.size() > 0) {
-                ApplySpecificHeadersAndResponses(api, codes);
+            if (null != packages && packages.contains("standard")) {
+                applySpecificHeadersAndResponses(api, new HashSet<>(Arrays.asList(STANDARD)));
+            } else if (null != packages && packages.contains("minimal")) {
+                applySpecificHeadersAndResponses(api, new HashSet<>(Arrays.asList(MINIMUM)));
+            } else if (null != codes  && codes.size() > 0) {
+                applySpecificHeadersAndResponses(api, codes);
             }
         }
 
@@ -143,7 +136,14 @@ public class APIPostProcessorMojo extends AbstractMojo {
         );
     }
 
-    private void ApplySpecificHeadersAndResponses(Swagger api, Set<String> codes) {
+    private String findFileFormat(final String fileAndPathName) {
+        return Arrays.asList(fileAndPathName + ".json", fileAndPathName + ".yaml", fileAndPathName + ".yml").stream()
+            .filter(ffn -> Files.exists(Paths.get(ffn)))
+            .findAny()
+            .orElse(fileAndPathName);
+    }
+    
+    private void applySpecificHeadersAndResponses(Swagger api, Set<String> codes) {
         Map<String, Path> paths = api.getPaths();
         paths.forEach((k, p) -> {
             List<Operation> operations = p.getOperations();

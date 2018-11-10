@@ -18,8 +18,7 @@ public final class Responses {
         // intentionally empty
     }
 
-    
-    public static void addResponseCodes(Operation operation, Set codes ) {
+    public static void addResponseCodes(Operation operation, Set codes) {
         if (codes.contains("200")) addOKResponse200(operation);
         if (codes.contains("400")) addBadRequestResponse400(operation);
         if (codes.contains("401")) addNotAuthorizedResponse401(operation);
@@ -44,7 +43,7 @@ public final class Responses {
         if (null != p.getDelete()) addDeleteResponses(p.getDelete(), codes);
     }
    
-    private static void addGetResponses(Operation getOperation, Set<String> codes ) {
+    private static void addGetResponses(Operation getOperation, Set<String> codes) {
         if (codes.contains("202")) addAcceptedResponse202(getOperation);
         if (codes.contains("203")) addNonAuthoritativeInformationResponse203(getOperation);
         if (codes.contains("301")) addPermanentlyMovedResponse301(getOperation);
@@ -91,7 +90,7 @@ public final class Responses {
 
     private static void addPatchResponses(Operation patchOperation, Set<String> codes) {
         Headers.addPatchHeaders(patchOperation);
-         if (codes.contains("422")) addUnprocessableRequestResponse422(patchOperation);
+        if (codes.contains("422")) addUnprocessableRequestResponse422(patchOperation);
     }
 
     private static void addOKResponse200(Operation operation) {
