@@ -5,7 +5,7 @@
     
     <name>API Post Processing Maven Plugin</name>
     <groupId>io.openapitools.api.specification</groupId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <artifactId>api-pp-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
 
