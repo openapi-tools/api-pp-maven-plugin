@@ -52,7 +52,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
         <io.swagger.version>1.5.16</io.swagger.version>
-        <io.swagger.parser.version>1.0.29</io.swagger.parser.version>
+        <io.swagger.parser.version>1.0.39</io.swagger.parser.version>
         <junit.version>4.12</junit.version>
         <org.mockito.version>2.11.0</org.mockito.version>
         <org.slf4j.version>1.7.25</org.slf4j.version>
